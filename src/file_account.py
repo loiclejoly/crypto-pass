@@ -34,7 +34,10 @@ class FileAccount:
         except KeyError:
             print("this entry does not exist")
 
-    def list_all_accounts(self):
+    def get_all_accounts(self):
+        return self.content["accounts"]
+
+    def display_all_accounts(self):
         for account in self.content["accounts"]:
             print(account)
             print("----------")

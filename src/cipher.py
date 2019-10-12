@@ -4,7 +4,7 @@ import hashlib
 from Crypto import Random
 from Crypto.Cipher import AES
 
-BS = 16
+BS = 16  # Block size
 
 
 def _padding(string):
@@ -20,7 +20,7 @@ def _unpadding(string):
 class AESCipher:
 
     def __init__(self, user, key):
-        key = user+key
+        key = user + key
         self.key = hashlib.sha256(key.encode('utf-8')).digest()
 
     def encrypt(self, raw):

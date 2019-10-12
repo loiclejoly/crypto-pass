@@ -1,14 +1,25 @@
-from Cipher import AESCipher
+from cipher import AESCipher
 import json
 
 
 class User:
     def __init__(self):
         self.user = None
-        self.pwd = None
         self.filename = None
         self.cipher = None
         self.content = None
+
+    def get_cipher(self):
+        return self.cipher
+
+    def get_username(self):
+        return self.user
+
+    def get_filename(self):
+        return self.filename
+
+    def update_content(self, new_content):
+        self.content = new_content
 
     def new_account(self, user, pwd, custom_file=None):
         self.cipher = AESCipher(user, pwd)
@@ -26,7 +37,6 @@ class User:
 
     def existing_account(self, user, pwd, custom_file=None):
         self.user = user
-        self.pwd = pwd
         self.cipher = AESCipher(user, pwd)
 
         if custom_file:
@@ -37,14 +47,10 @@ class User:
         with open(self.filename, 'rb') as f:
             data = f.read()
 
-        self.content = json.loads(self.cipher.decrypt(data))
-        print(self.content)
+        try:
+            self.content = json.loads(self.cipher.decrypt(data))
+            return True
+        except json.decoder.JSONDecodeError:
+            print("Decryption failed.")
+            return False
 
-    def get_cipher(self):
-        return self.cipher
-
-    def get_filename(self):
-        return self.filename
-
-    def update_content(self, new_content):
-        self.content = new_content
